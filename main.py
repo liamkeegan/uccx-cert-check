@@ -11,7 +11,7 @@ from prettytable import PrettyTable
 from datetime import datetime
 
 hosts = ['10.10.20.10']
-ports = [443, 7443, 8443, 8444, 8445, 8553, 9443]
+ports = [443, 7443, 8443, 8444, 8445, 8553, 9443, 12015]
 
 x = PrettyTable()
 x.field_names = ['Host', 'Port', 'Valid From', 'Valid Until', 'Valid?', 'Issuer', 'Common Name']
