@@ -5,22 +5,26 @@ Version: 1.0
 '''
 
 from OpenSSL import SSL
-from ssl import PROTOCOL_TLSv1  
+from ssl import PROTOCOL_TLSv1
 import socket
 from prettytable import PrettyTable
 from datetime import datetime
 
-hosts = ['10.10.20.10']
+hosts = ['10.10.30.1','10.10.30.2']
 ports = [443, 7443, 8443, 8444, 8445, 8553, 9443, 12015]
 
 x = PrettyTable()
-x.field_names = ['Host', 'Port', 'Valid From', 'Valid Until', 'Valid?', 'Issuer', 'Common Name']
+x.field_names = ['Host', 'Port', 'Valid From', 'Valid Until', 'Expired?', 'Issuer', 'Common Name']
 
 for host in hosts:
     for port in ports:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         osobj = SSL.Context(PROTOCOL_TLSv1)
-        sock.connect((host, int(port)))
+        try:
+            sock.connect((host, int(port)))
+        except Exception as msg:
+            x.add_row([host, port, '-', '-', '-', '-', msg])
+            continue
         oscon = SSL.Connection(osobj, sock)
         oscon.set_tlsext_host_name(host.encode())
         oscon.set_connect_state()
